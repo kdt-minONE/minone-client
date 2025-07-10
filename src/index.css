@@ -1,74 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+  * {
+    @apply border-gray-200;
   }
-
+  
+  body {
+    @apply font-sans;
+    background-color: #f7faff;
+    color: #333333;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* 다크 모드 */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    background-color: #0f172a;
+    color: #f8fafc;
+  }
+  
+  .dark * {
+    @apply border-gray-700;
+  }
+  
+  /* 스크롤바 스타일링 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3366cc;
+    opacity: 0.5;
+  }
+  
+  /* 포커스 스타일 개선 */
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #3366cc;
+    border-radius: 0.25rem;
+  }
+  
+  /* 선택 영역 스타일 */
+  ::selection {
+    background-color: rgba(51, 102, 204, 0.2);
+    color: #333333;
   }
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer components {
+  /* 민원 시스템 특화 컴포넌트 */
+  .minone-card {
+    @apply bg-white border border-gray-200 rounded-lg shadow-sm;
+  }
+  
+  .minone-header {
+    @apply bg-white border-b border-gray-200;
+    background-color: #f0f5fa;
+  }
+  
+  .minone-chat-ai {
+    @apply bg-blue-50 border border-blue-200 rounded-2xl p-4;
+  }
+  
+  .minone-chat-user {
+    @apply bg-primary-500 text-white rounded-2xl p-4;
+  }
+  
+  .minone-status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  
+  .minone-status-received {
+    @apply bg-info-500 text-white;
+  }
+  
+  .minone-status-processing {
+    @apply bg-warning-500 text-white;
+  }
+  
+  .minone-status-completed {
+    @apply bg-success-500 text-white;
+  }
+  
+  .minone-status-urgent {
+    @apply bg-red-500 text-white animate-pulse;
+  }
+  
+  /* 그라데이션 배경 */
+  .gradient-bg {
+    background: linear-gradient(135deg, #3366cc 0%, #0284c7 100%);
+  }
+  
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-gray-200/50;
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #3366cc, #0284c7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer utilities {
+  /* 피그마 기반 배경 컬러 */
+  .bg-minone-main {
+    background-color: #f7faff;
+  }
+  
+  .bg-minone-header {
+    background-color: #f0f5fa;
+  }
+  
+  /* 애니메이션 유틸리티 */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* shadcn/ui 호환 애니메이션 */
+  .animate-in {
+    animation-duration: 0.15s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+  
+  .animate-out {
+    animation-duration: 0.15s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: both;
+  }
+  
+  .fade-in-0 {
+    animation-name: fade-in;
+  }
+  
+  .fade-out-0 {
+    animation-name: fade-out;
+  }
+  
+  .zoom-in-95 {
+    animation-name: zoom-in;
+  }
+  
+  .zoom-out-95 {
+    animation-name: zoom-out;
+  }
+  
+  .slide-in-from-left-1\/2 {
+    animation-name: slide-in-from-left;
+  }
+  
+  .slide-in-from-top-48 {
+    animation-name: slide-in-from-top;
+  }
+  
+  .slide-out-to-left-1\/2 {
+    animation-name: slide-out-to-left;
+  }
+  
+  .slide-out-to-top-48 {
+    animation-name: slide-out-to-top;
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes zoom-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes zoom-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+  
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slide-in-from-top {
+    from {
+      transform: translateY(-48%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slide-out-to-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  
+  @keyframes slide-out-to-top {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-48%);
+    }
+  }
+  
+  @keyframes slide-up {
+    from {
+      transform: translateY(1rem);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scale-in {
+    from {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 }
