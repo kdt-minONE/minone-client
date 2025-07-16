@@ -2,6 +2,7 @@ import { useState } from "react";
 import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import SignupModal from "../SignupModal";
+import LoginModal from "../LoginModal";
 
 interface HeaderProps {
   className?: string;
@@ -9,6 +10,12 @@ interface HeaderProps {
 
 export const Header = ({ className }: HeaderProps) => {
   const [isSignup, setIsSignup] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+
+  const handleModalNavigate = () => {
+    setIsLogin(!isLogin);
+    setIsSignup(!isSignup);
+  };
 
   return (
     <header className="minone-header px-6 py-4">
@@ -22,7 +29,7 @@ export const Header = ({ className }: HeaderProps) => {
           </span>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" onClick={() => setIsLogin(true)}>
             로그인
           </Button>
           <Button variant="default" size="sm" onClick={() => setIsSignup(true)}>
@@ -34,6 +41,14 @@ export const Header = ({ className }: HeaderProps) => {
         <SignupModal
           open={isSignup}
           onOpenChange={() => setIsSignup(!isSignup)}
+          handleModal={handleModalNavigate}
+        />
+      )}
+      {isLogin && (
+        <LoginModal
+          open={isLogin}
+          onOpenChange={() => setIsLogin(!isLogin)}
+          handleModal={handleModalNavigate}
         />
       )}
     </header>

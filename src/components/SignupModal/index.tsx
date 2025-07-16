@@ -9,6 +9,7 @@ import { useSignup } from "../../hooks/auth";
 interface SignupModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  handleModal: () => void;
 }
 
 export interface SignupFormData {
@@ -26,7 +27,11 @@ interface AgreementState {
   marketing: boolean;
 }
 
-const SignupModal: React.FC<SignupModalProps> = ({ open, onOpenChange }) => {
+const SignupModal: React.FC<SignupModalProps> = ({
+  open,
+  onOpenChange,
+  handleModal,
+}) => {
   const [formData, setFormData] = useState<SignupFormData>({
     name: "",
     email: "",
@@ -140,16 +145,14 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onOpenChange }) => {
     }
 
     if (validateForm()) {
-      // 회원가입 로직 구현
-      console.log("회원가입 데이터:", formData, agreement);
       request(formData);
     }
   };
 
   useEffect(() => {
     if (response.called && response.data) {
-      console.log(response.data);
       alert("회원가입이 완료되었습니다!");
+      window.location.reload();
     }
   }, [response]);
 
@@ -439,10 +442,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onOpenChange }) => {
                 <button
                   type="button"
                   className="text-blue-500 font-semibold hover:underline"
-                  onClick={() => {
-                    // 로그인 모달로 전환 로직
-                    console.log("로그인 모달 열기");
-                  }}
+                  onClick={handleModal}
                 >
                   로그인
                 </button>
