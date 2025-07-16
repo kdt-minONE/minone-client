@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import SignupModal from "../SignupModal";
 import LoginModal from "../LoginModal";
+import { useAuthStore } from "../../store/authStore";
+import { LogOut, User } from "lucide-react";
 
 interface HeaderProps {
   className?: string;
@@ -11,10 +12,18 @@ interface HeaderProps {
 export const Header = ({ className }: HeaderProps) => {
   const [isSignup, setIsSignup] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  
+  // Zustand store
+  const { user, isAuthenticated, logout } = useAuthStore();
 
   const handleModalNavigate = () => {
     setIsLogin(!isLogin);
     setIsSignup(!isSignup);
+  };
+
+  const handleLogout = () => {
+    logout();
+    alert("로그아웃되었습니다.");
   };
 
   return (
@@ -29,12 +38,32 @@ export const Header = ({ className }: HeaderProps) => {
           </span>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm" onClick={() => setIsLogin(true)}>
-            로그인
-          </Button>
-          <Button variant="default" size="sm" onClick={() => setIsSignup(true)}>
-            회원가입
-          </Button>
+          {isAuthenticated && user ? (
+            <>
+              <div className="flex items-center space-x-2 mr-4">
+                <User className="w-4 h-4 text-gray-600" />
+                <span className="text-sm text-gray-700">{user.name}님</span>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleLogout}
+                className="flex items-center space-x-1"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>로그아웃</span>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" onClick={() => setIsLogin(true)}>
+                로그인
+              </Button>
+              <Button variant="default" size="sm" onClick={() => setIsSignup(true)}>
+                회원가입
+              </Button>
+            </>
+          )}
         </div>
       </div>
       {isSignup && (

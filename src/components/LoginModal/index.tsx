@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { LogIn, Eye, EyeOff } from "lucide-react";
 import { useLogin } from "../../hooks/auth";
+import { useAuthStore } from "../../store/authStore";
 
 interface LoginModalProps {
   open: boolean;
@@ -29,6 +30,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
   const [req, res] = useLogin();
+
+  // Zustand store
+  const { login } = useAuthStore();
 
   const handleInputChange = (field: keyof LoginFormData, value: string) => {
     setFormData((prev) => ({
@@ -72,10 +76,19 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   useEffect(() => {
     if (res.data && res.called) {
+      // 로그인 성공 시 zustand store에 저장
+      const userData = {
+        id: res.data.data.id,
+        email: res.data.data.email,
+        name: res.data.data.name,
+        role: res.data.data.role,
+      };
+
+      login(userData, res.data.data.accessToken, res.data.data.refreshToken);
       alert("로그인이 완료되었습니다.");
-      window.location.reload();
+      onOpenChange(false);
     }
-  }, [res]);
+  }, [res, login, onOpenChange]);
 
   if (!open) return null;
 
