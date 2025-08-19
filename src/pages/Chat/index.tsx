@@ -9,6 +9,8 @@ import {
   Bot,
   ArrowLeft,
   MessageSquare,
+  User,
+  LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
@@ -63,7 +65,7 @@ const dummyChatRooms: ChatRoom[] = [
 
 const Chat = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([
     {
       id: 1,
@@ -152,6 +154,12 @@ const Chat = () => {
   const handleSignupModalToggle = () => {
     setSignupModalOpen(false);
     setLoginModalOpen(true);
+  };
+
+  const handleLogout = () => {
+    logout();
+    alert("로그아웃되었습니다.");
+    window.location.replace("/");
   };
 
   const handleNewChat = () => {
@@ -243,8 +251,37 @@ const Chat = () => {
               </div>
             </div>
 
-            {/* 우측 공간 (균형을 위해) */}
-            <div className="w-20"></div>
+            {/* 우측 유저 정보 및 로그아웃 */}
+            <div className="flex items-center space-x-2">
+              {isAuthenticated && user ? (
+                <>
+                  <button 
+                    onClick={() => navigate("/mypage")}
+                    className="flex items-center space-x-2 mr-2 hover:text-primary-600 transition-colors"
+                  >
+                    <User className="w-4 h-4 text-gray-600" />
+                    <span className="text-sm text-gray-700">{user.name}님</span>
+                  </button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handleLogout}
+                    className="flex items-center space-x-1"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>로그아웃</span>
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setLoginModalOpen(true)}
+                >
+                  로그인
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 

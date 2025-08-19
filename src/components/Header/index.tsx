@@ -4,12 +4,14 @@ import SignupModal from "../SignupModal";
 import LoginModal from "../LoginModal";
 import { useAuthStore } from "../../store/authStore";
 import { LogOut, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   className?: string;
 }
 
 export const Header = ({ className }: HeaderProps) => {
+  const navigate = useNavigate();
   const [isSignup, setIsSignup] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   
@@ -24,6 +26,7 @@ export const Header = ({ className }: HeaderProps) => {
   const handleLogout = () => {
     logout();
     alert("로그아웃되었습니다.");
+    window.location.replace("/");
   };
 
   return (
@@ -40,10 +43,13 @@ export const Header = ({ className }: HeaderProps) => {
         <div className="flex items-center space-x-2">
           {isAuthenticated && user ? (
             <>
-              <div className="flex items-center space-x-2 mr-4">
+              <button 
+                onClick={() => navigate("/mypage")}
+                className="flex items-center space-x-2 mr-4 hover:text-primary-600 transition-colors"
+              >
                 <User className="w-4 h-4 text-gray-600" />
                 <span className="text-sm text-gray-700">{user.name}님</span>
-              </div>
+              </button>
               <Button 
                 variant="ghost" 
                 size="sm" 

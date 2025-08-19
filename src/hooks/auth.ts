@@ -43,3 +43,52 @@ export const useLogin = () => {
 
   return [run, response] as [typeof run, typeof response];
 };
+
+// 사용자 정보 조회
+export const useGetUser = () => {
+  const [request, response] = useAxios();
+
+  const run = useCallback(() => {
+    return request({
+      url: "users/me",
+      method: "GET",
+    });
+  }, [request]);
+
+  return [run, response] as [typeof run, typeof response];
+};
+
+// 사용자 비밀번호 변경
+export const useUpdateUserPassword = () => {
+  const [request, response] = useAxios();
+
+  const run = useCallback(
+    (oldPassword: string, newPassword: string) => {
+      return request({
+        url: "users/me",
+        method: "PATCH",
+        data: {
+          oldPassword,
+          newPassword,
+        },
+      });
+    },
+    [request]
+  );
+
+  return [run, response] as [typeof run, typeof response];
+};
+
+// 사용자 계정 삭제
+export const useDeleteUser = () => {
+  const [request, response] = useAxios();
+
+  const run = useCallback(() => {
+    return request({
+      url: "users/me",
+      method: "DELETE",
+    });
+  }, [request]);
+
+  return [run, response] as [typeof run, typeof response];
+};

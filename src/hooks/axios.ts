@@ -1,5 +1,6 @@
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
+import { useAuthStore } from "../store/authStore";
 
 // tslint:disable-next-line: interface-name
 export interface UseAxiosResponse {
@@ -18,16 +19,8 @@ const axios = Axios.create({
   baseURL: "http://localhost:8081/api/v1",
 });
 
-let isRefreshing = false;
-let subscribers: ((token: string) => void)[] = [];
-
-const onRrefreshed = (token: string) => {
-  subscribers.forEach((callback) => callback(token));
-  subscribers = [];
-};
-
 export const useAxios = (): UseAxiosType => {
-  // const [tokens, setTokens] = useRecoilState(userState);
+  const { accessToken, logout } = useAuthStore();
 
   const [data, setData] = useState<any>();
   const [error, setError] = useState<AxiosError<any>>();
@@ -51,7 +44,7 @@ export const useAxios = (): UseAxiosType => {
         ...config,
         headers: {
           ...config?.headers,
-          // Authorization: `Bearer ${tokens?.accessToken}`,
+          ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
       };
 
@@ -66,65 +59,19 @@ export const useAxios = (): UseAxiosType => {
           : e;
         setError(error);
 
-        // if (e.response.status === 401) {
-        //   if (e.response.data.code === "INVALID_TOKEN") {
-        //     if (!isRefreshing) {
-        //       isRefreshing = true;
-
-        //       axios
-        //         .post(
-        //           "auth/refresh",
-        //           { refreshToken: tokens?.refreshToken },
-        //           { withCredentials: true }
-        //         )
-        //         .then((res) => {
-        //           setTokens(
-        //             (p) =>
-        //               p && {
-        //                 ...p,
-        //                 accessToken: res.data.data.accessToken,
-        //                 refreshToken: res.data.data.refreshToken,
-        //               }
-        //           );
-
-        //           onRrefreshed(res.data.data.accessToken);
-        //         })
-        //         .catch(() => {
-        //           setTokens(null);
-        //           alert("다시 로그인 해주세요.");
-        //           window.location.replace("/login");
-        //         })
-        //         .finally(() => {
-        //           isRefreshing = false;
-        //         });
-        //     }
-
-        //     return new Promise<AxiosResponse<any>>((resolve) => {
-        //       subscribers.push(async (token: string) => {
-        //         config!.headers!.Authorization = `Bearer ${token}`;
-        //         try {
-        //           const res = await axios(config!);
-        //           setData(res.data);
-        //           resolve(res);
-        //         } catch (e: any) {
-        //           const error = e?.response?.data?.message
-        //             ? e?.response?.data?.message
-        //             : e;
-        //           setError(error);
-        //           throw error;
-        //         }
-        //       });
-        //     });
-        //   }
-        // }
+        if (e.response && e.response.status === 401) {
+          // 토큰이 만료되거나 유효하지 않은 경우
+          logout();
+          alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+          window.location.replace("/");
+        }
         throw error;
       } finally {
         setCalled(true);
         setLoading(false);
       }
     },
-    // [setTokens, tokens]
-    []
+    [accessToken, logout]
   );
 
   useEffect(() => {
