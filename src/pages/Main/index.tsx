@@ -12,8 +12,15 @@ import {
   Shield,
   Users,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
+  const navigate = useNavigate();
+
+  const handleChatStart = () => {
+    navigate("/chat");
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -50,6 +57,7 @@ const Main = () => {
               <Button
                 size="lg"
                 className="bg-primary-500 hover:bg-primary-600 text-lg px-8 py-4 h-auto"
+                onClick={handleChatStart}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 지금 바로 민원 상담하기
@@ -283,6 +291,7 @@ const Main = () => {
               <Button
                 size="lg"
                 className="bg-primary-500 hover:bg-primary-600 text-lg px-10 py-6 h-auto shadow-lg"
+                onClick={handleChatStart}
               >
                 <Bot className="w-6 h-6 mr-3" />
                 AI 민원 상담 시작하기
